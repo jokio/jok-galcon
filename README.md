@@ -1,4 +1,4 @@
 jok-galcon
 ==========
 
-ონლაინ სტრატეგია, 2-8 მოთამაშეს შორის
+Online Startegy Game
