@@ -11,23 +11,21 @@ namespace Jok.Galcon.GameServer
     {
         public override bool IsStarted
         {
-            get { throw new NotImplementedException(); }
+            get { return false; }
         }
 
         public override bool IsFinished
         {
-            get { throw new NotImplementedException(); }
+            get { return false; }
         }
 
 
         protected override void OnJoin(GamePlayer player, object state)
         {
-            throw new NotImplementedException();
         }
 
         protected override void OnLeave(GamePlayer player)
         {
-            throw new NotImplementedException();
         }
     }
 

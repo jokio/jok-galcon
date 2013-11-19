@@ -13,8 +13,10 @@ namespace Jok.Galcon.Controllers
             return RedirectToAction("Play");
         }
 
-        public ActionResult Play()
+        public ActionResult Play(string channel, int userid = 32)
         {
+            ViewBag.UserID = userid;
+
             return View();
         }
     }

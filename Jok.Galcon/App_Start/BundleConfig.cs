@@ -14,7 +14,8 @@ namespace Jok.Galcon
 
             bundles.Add(new ScriptBundle("~/play/js").Include(
                 "~/Scripts/jquery.signalR-2.0.0.js",
-                "~/Scripts/Jok.JapMatrix.Client.js"
+                "~/Scripts/Jok.GameEngine.js",
+                "~/Scripts/Game.js"
             ));
         }
     }
