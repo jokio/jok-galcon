@@ -1,0 +1,36 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Billiard</title>
+    <link href="http://play.jok.io/css?ignore=1" rel="stylesheet" />
+    @Styles.Render("~/play/css")
+    <script>
+        var jok = {};
+
+        jok.config = {
+            gameid: '@ViewBag.GameID',
+            channel: '@ViewBag.Channel',
+            language: '@ViewBag.Language',
+            isVIPMember: '@ViewBag.IsVIPMember' == 'True',
+            exitUrl: '@ViewBag.ExitUrl',
+            authorizationUrl: '@ViewBag.AuthorizationUrl',
+            isMobileDevice: @Request.Browser.IsMobileDevice.ToString().ToLower(),
+            audios: '@Url.Content("~/Content/Audios/")',
+            isMobileApp: '@ViewBag.IsMobileApp' == 'True'
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+</head>
+<body>
+    <div id="Game">
+        
+    </div>
+    <script src="http://play.jok.io/js?ignore=3"></script>
+    @Scripts.Render("~/play/js")
+    @*@if (ViewBag.UserID == 32)
+        {
+            <script src="http://debug.jok.io/target/target-script-min.js"></script>
+        }*@
+</body>
+</html>
