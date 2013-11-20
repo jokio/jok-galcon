@@ -27,7 +27,18 @@ namespace Jok.Galcon.GameServer
 
         public void Move(Guid from, Guid to, int percent)
         {
+            var user = GetCurrentUser();
+            if (user == null) return;
 
+            user.Table.Move(user.UserID, from, to, percent);
+        }
+
+        public void PlayAgain()
+        {
+            var user = GetCurrentUser();
+            if (user == null) return;
+
+            user.Table.PlayAgain(user.UserID);
         }
     }
 }

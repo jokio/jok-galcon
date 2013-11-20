@@ -35,6 +35,17 @@ namespace Jok.Galcon.GameServer
             }
         }
 
+        public void PlayAgain(int userid)
+        {
+            var player = GetPlayer(userid);
+            if (player == null) return;
+
+            lock (SyncObject)
+            {
+                OnPlayAgain(player);
+            }
+        }
+
 
         protected override void OnJoin(GamePlayer player, object state)
         {
@@ -55,6 +66,11 @@ namespace Jok.Galcon.GameServer
         protected void OnMove(GamePlayer player, Guid from, Guid to, int percent)
         {
             GameCallback.PlayerMove(Table, player.UserID, from, to, percent * 37, 1000 /* მანძილიდან გამომდინარე */);
+        }
+
+        protected void OnPlayAgain(GamePlayer player)
+        {
+
         }
 
 
