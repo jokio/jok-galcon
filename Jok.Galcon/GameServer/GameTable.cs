@@ -77,6 +77,7 @@ namespace Jok.Galcon.GameServer
         void Init()
         {
             Status = TableStatus.New;
+            Players.ForEach(p => p.Init());
         }
 
 
