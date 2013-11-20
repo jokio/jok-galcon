@@ -26,12 +26,12 @@ namespace Jok.Galcon.GameServer
         #endregion
 
 
-        public void Move(Guid from, Guid to, int percent)
+        public void Move(Guid from, Guid to, int count)
         {
             var user = GetCurrentUser();
             if (user == null) return;
 
-            user.Table.Move(user.UserID, from, to, percent);
+            user.Table.Move(user.UserID, from, to, count);
         }
 
         public void PlayAgain()

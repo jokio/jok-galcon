@@ -55,7 +55,6 @@ namespace Jok.Galcon.GameServer
         {
             var conns = GetUsers(to);
             if (conns == null) return;
-
             Hub.Clients.Clients(conns).TableState(table);
         }
     }
