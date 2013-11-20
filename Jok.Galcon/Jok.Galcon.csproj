@@ -133,7 +133,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GameServer\Models\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +144,9 @@
     <Compile Include="GameServer\GameCallback.cs" />
     <Compile Include="GameServer\GameHub.cs" />
     <Compile Include="GameServer\GameTable.cs" />
+    <Compile Include="GameServer\Models\Planet.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
