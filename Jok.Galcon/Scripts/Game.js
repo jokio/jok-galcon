@@ -13,6 +13,9 @@ var Game = {
     // Server Callbacks ----------------------------------------
     Online: function () {
         console.log('server is online');
+
+        $('#Notification > .item').hide();
+        $('#Notification > .item.waiting_opponent').show();
     },
 
     Offline: function () {
