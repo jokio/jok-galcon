@@ -9,23 +9,67 @@ namespace Jok.Galcon.GameServer
 {
     public class GameTable : GameTableBase<GamePlayer>
     {
+        #region Properties
         public override bool IsStarted
         {
-            get { return false; }
+            get { return Status == TableStatus.Started; }
         }
 
         public override bool IsFinished
         {
-            get { return false; }
+            get { return Status == TableStatus.Finished; }
+        }
+
+        private TableStatus Status { get; set; }
+        #endregion
+
+
+        public void Move(int userid, Guid from, Guid to, int percent)
+        {
+            var player = GetPlayer(userid);
+            if (player == null) return;
+
+            lock (SyncObject)
+            {
+                OnMove(player, from, to, percent);
+            }
         }
 
 
         protected override void OnJoin(GamePlayer player, object state)
         {
+            switch (Status)
+            {
+
+            }
         }
 
         protected override void OnLeave(GamePlayer player)
         {
+            switch (Status)
+            {
+
+            }
+        }
+
+        protected void OnMove(GamePlayer player, Guid from, Guid to, int percent)
+        {
+            GameCallback.PlayerMove(Table, player.UserID, from, to, percent * 37, 1000 /* მანძილიდან გამომდინარე */);
+        }
+
+
+        void Init()
+        {
+            Status = TableStatus.New;
+        }
+
+
+        enum TableStatus
+        {
+            New,
+            Started,
+            Stopped,
+            Finished
         }
     }
 
@@ -43,5 +87,11 @@ namespace Jok.Galcon.GameServer
         public List<string> ConnectionIDs { get; set; }
         [DataMember]
         public int UserID { get; set; }
+
+
+        public void Init()
+        {
+
+        }
     }
 }

@@ -24,5 +24,10 @@ namespace Jok.Galcon.GameServer
         }
         #endregion
 
+
+        public void Move(Guid from, Guid to, int percent)
+        {
+
+        }
     }
 }

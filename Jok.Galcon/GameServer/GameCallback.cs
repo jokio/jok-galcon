@@ -42,28 +42,21 @@ namespace Jok.Galcon.GameServer
         #endregion
 
 
-        public static void GameEnd(ICallback to, int winnerId)
+
+        public static void PlayerMove(ICallback to, int userid, Guid fromObject, Guid toObject, int shipsCount, int animationDuration)
         {
             var conns = GetUsers(to);
             if (conns == null) return;
 
-            Hub.Clients.Clients(conns).GameEnd(winnerId);
+            Hub.Clients.Clients(conns).PlayerMove(userid, fromObject, toObject, shipsCount, animationDuration);
         }
 
-        public static void RestartGame(ICallback to)
+        public static void TableState(ICallback to, GameTable table)
         {
             var conns = GetUsers(to);
             if (conns == null) return;
 
-            Hub.Clients.Clients(conns).RestartGame(0);
-        }
-
-        public static void PlayerState(ICallback to, GamePlayer[] pl)
-        {
-            var conns = GetUsers(to);
-            if (conns == null) return;
-
-            Hub.Clients.Clients(conns).PlayerState(pl);
+            Hub.Clients.Clients(conns).TableState(table);
         }
     }
 }
