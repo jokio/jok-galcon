@@ -1,4 +1,5 @@
-﻿using Jok.Galcon.Common;
+﻿using Jok.GameEngine;
+using Jok.GameEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
