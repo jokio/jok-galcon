@@ -92,19 +92,24 @@ var Game = {
             circle.Text = text;
             circle.GroupID = planet.GroupID;
             circle.ID = planet.ID;
-            circle.on('mousedown', function () {
-                console.log(this.ID);
-                console.log(this.GroupID);
-                console.log(Game.currentPlayerGroupID);
-                if (Game.selectedPlanet == undefined) {
-                    if (this.GroupID != Game.currentPlayerGroupID) {
-                        return;
+            circle.on('click tap', function (e) {
+                if (e.which == 1) {
+
+
+                    if (Game.selectedPlanet == undefined) {
+                        if (this.GroupID != Game.currentPlayerGroupID) {
+                            return;
+                        }
+                        Game.selectedPlanet = this;
+                        this.setStroke('red');
+                        Game.gameLayer.draw();
                     }
-                    Game.selectedPlanet = this;
-                    this.setStroke('red');
-                } else {
+                }
+                else if (e.which == 3){
                     // TODO gamoidzaxe Move();
                     Game.proxy.send('move', Game.selectedPlanet.ID, this.ID, Math.ceil(Game.selectedPlanet.ShipCount / 2));
+                    Game.selectedPlanet.setStroke(null);
+                    Game.selectedPlanet = undefined;
                 }
             });
             Game.planets.push(circle);
