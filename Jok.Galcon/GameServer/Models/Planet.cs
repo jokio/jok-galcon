@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Jok.Galcon.GameServer.Models
+namespace Jok.StarWars.GameServer.Models
 {
     public class Planet
     {

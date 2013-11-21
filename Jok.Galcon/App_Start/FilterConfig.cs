@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace Jok.Galcon
+namespace Jok.StarWars
 {
     public class FilterConfig
     {

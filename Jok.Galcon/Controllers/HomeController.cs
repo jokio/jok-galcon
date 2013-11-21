@@ -7,7 +7,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Jok.Galcon.Controllers
+namespace Jok.StarWars.Controllers
 {
     public class HomeController : Controller
     {
