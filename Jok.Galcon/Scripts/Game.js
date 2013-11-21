@@ -1,12 +1,14 @@
 ﻿
 var Game = {
-    stage : undefined,
+    stage: undefined,
     gameLayer: undefined,
     planets: [],
     Game: this,
     currentPlayerGroupID: undefined,
     colors: ['gray', 'green', 'yellow'],
     selectedPlanet: undefined,
+
+
     Init: function () {
         var proxy = new GameHub('GameHub', jok.config.sid, jok.config.channel);
         proxy.on('Online', this.Online.bind(this));
@@ -16,8 +18,46 @@ var Game = {
         proxy.on('UserAuthenticated', this.UserAuthenticated.bind(this));
         proxy.start();
     },
+
+
+    // Server Callbacks ----------------------------------------
+    Online: function () {
+        console.log('server is online');
+    },
+
+    Offline: function () {
+        console.log('server is offline');
+    },
+
+    PlayerMove: function (userid, fromObject, toObject, shipsCount, animationDuration) {
+
+    },
+
+    TableState: function (table) {
+        switch (table.Status) {
+            case 0:
+                console.log('joined');
+                $('#Notification > .item').hide();
+                $('#Notification > .item.waiting_opponent').show();
+                jok.setPlayer(1, jok.currentUserID);
+                break;
+            case 1:
+                var opponent = (table.players[0].UserID == jok.currentUserID) ? table.players[1].UserID : table.players[0].UserID;
+                jok.setPlayer(1, jok.currentUserID);
+                jok.setPlayer(2, opponent);
+                $('#Notification > .item').hide();
+                this.DrawPlanets(table.Planets);
+                break;
+        }
+    },
+
+    UserAuthenticated: function (userid) {
+        jok.currentUserID = userid;
+    },
+
+
     // Draw Canvas 
-    InitCanvas: function(){
+    InitCanvas: function () {
         this.stage = new Kinetic.Stage({
             container: 'container',
             width: 800,
@@ -67,40 +107,6 @@ var Game = {
         Game.stage.add(Game.gameLayer);
         Game.stage.draw();
     },
-    // Server Callbacks ----------------------------------------
-    Online: function () {
-        console.log('server is online');
-    },
-
-    Offline: function () {
-        console.log('server is offline');
-    },
-
-    PlayerMove : function(userid, fromObject, toObject, shipsCount, animationDuration){
-
-    },
-
-    TableState : function(table){
-        switch (table.Status) {
-            case 0:
-                console.log('joined');
-                $('#Notification > .item').hide();
-                $('#Notification > .item.waiting_opponent').show();
-                jok.setPlayer(1, jok.currentUserID);
-                break;
-            case 1:
-                var opponent = (table.players[0].UserID == jok.currentUserID)? table.players[1].UserID : table.players[0].UserID;
-                jok.setPlayer(1, jok.currentUserID);
-                jok.setPlayer(2, opponent);
-                $('#Notification > .item').hide();
-                this.DrawPlanets(table.Planets);
-                break;
-        }
-    },
-
-    UserAuthenticated: function (userid) {
-        jok.currentUserID = userid;
-    }
 }
 
 
