@@ -64,8 +64,8 @@ var Game = {
     },
 
 
-    // Draw Canvas 
-    InitCanvas: function () {
+    
+    DrawPlanets: function (remotePlanets) {
         this.stage = new Kinetic.Stage({
             container: 'container',
             width: 800,
@@ -73,10 +73,6 @@ var Game = {
         });
         this.gameLayer = new Kinetic.Layer();
         this.gameLayer.clear();
-    },
-
-    DrawPlanets: function (remotePlanets) {
-        this.InitCanvas();
         remotePlanets.forEach(function (planet) {
             var circle = new Kinetic.Circle({
                 x: planet.X,
