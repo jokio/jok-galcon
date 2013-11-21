@@ -2,7 +2,7 @@
 var Game = {
 
     Init: function () {
-        var proxy = new GameHub('GameHub', window.userid, '');
+        var proxy = new GameHub('GameHub', jok.config.sid, jok.config.channel);
         proxy.on('Online', this.Online.bind(this));
         proxy.on('Offline', this.Offline.bind(this));
 

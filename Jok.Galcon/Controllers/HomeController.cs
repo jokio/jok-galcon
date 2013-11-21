@@ -50,6 +50,7 @@ namespace Jok.Galcon.Controllers
             //    ViewBag.Language = userInfo.CultureName.Replace('-', '_');
             //}
 
+            ViewBag.SID = sid;
             ViewBag.Channel = id;
             ViewBag.AuthorizationUrl = loginUrl;
             ViewBag.ExitUrl = exitUrl;
