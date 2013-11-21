@@ -156,7 +156,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <None Include="Properties\PublishProfiles\Jok.Galcon.pubxml" />
+    <None Include="Properties\PublishProfiles\Jok.StarWars.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\Game.js" />
     <Content Include="Scripts\Jok.GameEngine.js" />
