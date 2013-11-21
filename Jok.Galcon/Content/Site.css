@@ -145,3 +145,10 @@
     font-size: 12px;
 }
 
+
+
+.kineticjs-content canvas {
+    left: 0px;
+    top: 0px;
+    position: absolute;
+}
