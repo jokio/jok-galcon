@@ -20,9 +20,9 @@ namespace Jok.Galcon.GameServer
         {
             get { return Status == TableStatus.Finished; }
         }
-
-        private TableStatus Status { get; set; }
-
+        [DataMember]
+        public TableStatus Status { get; set; }
+        [DataMember]
         public List<Planet> Planets { get; set; }
 
         private IJokTimer<object> Timer = JokTimer<object>.Create();
@@ -66,17 +66,30 @@ namespace Jok.Galcon.GameServer
             switch (Status)
             {
                 case TableStatus.New :
-                    Players.Add(player);
+                    if (!Players.Contains(player))
+                    {
+                        Players.Add(player);
+                    }
+                    
                     if (Players.Count() == 2)
                     {
-                        Status = TableStatus.Started;
                         Init();
+                        Status = TableStatus.Started;
                         var opponent = GetNextPlayer(player);
                         GameCallback.TableState(player, this);
                         GameCallback.TableState(opponent, this);
                     }
+                    else
+                    {
+                        GameCallback.TableState(player, this);
+                    }
                     break;
+                case TableStatus.Started :
+                    GameCallback.TableState(this, this);
+                    break;
+
             }
+            
         }
 
         protected override void OnLeave(GamePlayer player)
@@ -225,7 +238,7 @@ namespace Jok.Galcon.GameServer
             GameCallback.TableState(this, this);
         }
 
-        enum TableStatus
+        public enum TableStatus
         {
             New,
             Started,
