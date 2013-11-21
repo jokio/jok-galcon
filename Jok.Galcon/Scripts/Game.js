@@ -7,16 +7,17 @@ var Game = {
     currentPlayerGroupID: undefined,
     colors: ['gray', 'green', 'yellow'],
     selectedPlanet: undefined,
-
+    proxy : undefined,
 
     Init: function () {
-        var proxy = new GameHub('GameHub', jok.config.sid, jok.config.channel);
-        proxy.on('Online', this.Online.bind(this));
-        proxy.on('Offline', this.Offline.bind(this));
-        proxy.on('PlayerMove', this.PlayerMove.bind(this));
-        proxy.on('TableState', this.TableState.bind(this));
-        proxy.on('UserAuthenticated', this.UserAuthenticated.bind(this));
-        proxy.start();
+        Game.proxy = new GameHub('GameHub', jok.config.sid, jok.config.channel);
+        Game.proxy.on('Online', this.Online.bind(this));
+        Game.proxy.on('Offline', this.Offline.bind(this));
+        Game.proxy.on('PlayerMove', this.PlayerMove.bind(this));
+        Game.proxy.on('TableState', this.TableState.bind(this));
+        Game.proxy.on('UpdatePlanetsState', this.UpdatePlanetsState.bind(this));
+        Game.proxy.on('UserAuthenticated', this.UserAuthenticated.bind(this));
+        Game.proxy.start();
     },
 
 
@@ -32,8 +33,15 @@ var Game = {
     PlayerMove: function (userid, fromObject, toObject, shipsCount, animationDuration) {
 
     },
-
+    
     TableState: function (table) {
+        
+        table.players.forEach(function (player) {
+            console.log(player.GroupID);
+            if (player.UserID == jok.currentUserID) {
+                Game.currentPlayerGroupID = player.GroupID;
+            }
+        });
         switch (table.Status) {
             case 0:
                 console.log('joined');
@@ -89,6 +97,9 @@ var Game = {
             circle.GroupID = planet.GroupID;
             circle.ID = planet.ID;
             circle.on('mousedown', function () {
+                console.log(this.ID);
+                console.log(this.GroupID);
+                console.log(Game.currentPlayerGroupID);
                 if (Game.selectedPlanet == undefined) {
                     if (this.GroupID != Game.currentPlayerGroupID) {
                         return;
@@ -97,7 +108,7 @@ var Game = {
                     this.setStroke('red');
                 } else {
                     // TODO gamoidzaxe Move();
-                    proxy.send('move', Game.selectedPlanet.ID, this.ID, Math.ceil(Game.selectedPlanet.ShipCount / 2));
+                    Game.proxy.send('move', Game.selectedPlanet.ID, this.ID, Math.ceil(Game.selectedPlanet.ShipCount / 2));
                 }
             });
             Game.planets.push(circle);
@@ -107,6 +118,22 @@ var Game = {
         Game.stage.add(Game.gameLayer);
         Game.stage.draw();
     },
+
+
+    UpdatePlanetsState: function (remotePlanets) {
+        console.log(remotePlanets);
+        Game.planets.forEach(function (planet) {
+            for (var i = 0; i < remotePlanets.length; i++) {
+                if (remotePlanets[i].ID == planet.ID) {
+                    planet.ShipCount = remotePlanets[i].ShipCount;
+                    planet.GroupID= remotePlanets[i].GroupID;
+                    planet.Text.setText(planet.ShipCount.toString());
+                    planet.setFill(Game.colors[planet.GroupID]);
+                }
+            }
+            Game.gameLayer.draw();
+        });
+    }
 }
 
 

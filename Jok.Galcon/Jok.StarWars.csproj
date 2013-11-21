@@ -147,6 +147,7 @@
     <Compile Include="GameServer\Models\Planet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GameServer\Models\PlanetState.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

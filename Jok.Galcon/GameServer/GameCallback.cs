@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Jok.StarWars.GameServer.Models;
 
 namespace Jok.StarWars.GameServer
 {
@@ -56,6 +57,13 @@ namespace Jok.StarWars.GameServer
             var conns = GetUsers(to);
             if (conns == null) return;
             Hub.Clients.Clients(conns).TableState(table);
+        }
+
+        public static void UpdatePlanetsState(ICallback to, List<PlanetState> planets)
+        {
+            var conns = GetUsers(to);
+            if (conns == null) return;
+            Hub.Clients.Clients(conns).UpdatePlanetsState(planets);
         }
     }
 }

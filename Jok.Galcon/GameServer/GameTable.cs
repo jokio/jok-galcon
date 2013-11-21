@@ -26,6 +26,7 @@ namespace Jok.StarWars.GameServer
         public List<Planet> Planets { get; set; }
 
         private IJokTimer<object> Timer = JokTimer<object>.Create();
+        private IJokTimer<object> StateUpdaterTimer = JokTimer<object>.Create();
 
         private const int NumberOfPlanets = 20;
 
@@ -60,6 +61,16 @@ namespace Jok.StarWars.GameServer
             }
         }
 
+        public void UpdatePlanetsState(object _obj)
+        {
+            var planets = Planets.Select(c => new PlanetState
+            {
+                GroupID = c.GroupID,
+                ID = c.ID,
+                ShipCount = c.ShipCount
+            }).ToList();
+            GameCallback.UpdatePlanetsState(this, planets);
+        }
 
         protected override void OnJoin(GamePlayer player, object state)
         {
@@ -131,6 +142,7 @@ namespace Jok.StarWars.GameServer
                 }
             }
             GameCallback.PlayerMove(Table, player.UserID, from, to, count, 0 /* მანძილიდან გამომდინარე */);
+            UpdatePlanetsState(null);
             var gameIsOver = CheckFinishGame();
             if (gameIsOver)
             {
@@ -204,7 +216,10 @@ namespace Jok.StarWars.GameServer
             }
             Planets[firstPlayer].GroupID = 1;
             Planets[secondPlayer].GroupID = 2;
+            Players[0].GroupID = 1;
+            Players[1].GroupID = 2;
             Timer.SetInterval(AddShips, null, 2000);
+            StateUpdaterTimer.SetInterval(UpdatePlanetsState, null, 1000);
             Players.ForEach(p => p.Init());
         }
 
@@ -223,6 +238,7 @@ namespace Jok.StarWars.GameServer
         private void FinishGame()
         {
             Timer.Stop();
+            StateUpdaterTimer.Stop();
             Status = TableStatus.Finished;
             var winnerGroup = Planets.FirstOrDefault(c=>c.GroupID != 0 && c.ShipCount > 0);
             if (winnerGroup != null)
