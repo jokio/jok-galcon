@@ -16,6 +16,7 @@
         Game.proxy.on('TableState', this.TableState.bind(this));
         Game.proxy.on('UpdatePlanetsState', this.UpdatePlanetsState.bind(this));
         Game.proxy.on('UserAuthenticated', this.UserAuthenticated.bind(this));
+        Game.proxy.on('Close', this.Close.bind(this));
         Game.proxy.start();
     },
 
@@ -140,6 +141,16 @@
             }
             Game.gameLayer.draw();
         });
+    },
+
+    Close : function (reason) {
+
+        $('#Notification > .item').hide();
+        $('#Notification > .item.quit > span').html(reason);
+        $('#Notification > .item.quit').show();
+        $('#Game').hide();
+        jok.setPlayer(1, null);
+        jok.setPlayer(2, null);
     }
 }
 
