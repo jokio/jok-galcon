@@ -1,5 +1,4 @@
-﻿
-var Game = {
+﻿var Game = {
     stage: undefined,
     gameLayer: undefined,
     planets: [],
@@ -63,8 +62,6 @@ var Game = {
         jok.currentUserID = userid;
     },
 
-
-    
     DrawPlanets: function (remotePlanets) {
         if (Game.canvasIsDrawn != undefined) {
             return;
@@ -84,16 +81,15 @@ var Game = {
                 radius: planet.Radius,
                 fill: Game.colors[planet.GroupID],
             });
-            var text = new Kinetic.Text({
-                x: planet.X,
-                y: planet.Y,
+            circle.Text = new Kinetic.Text({
                 text: planet.ShipCount.toString(),
                 fontSize: 14,
                 fontFamily: 'Calibri',
                 fill: 'black'
             });
+            circle.Text.setX(circle.getX() - circle.Text.getWidth() / 2);
+            circle.Text.setY(circle.getY() - circle.Text.getHeight() / 2);
             circle.ShipCount = planet.ShipCount;
-            circle.Text = text;
             circle.GroupID = planet.GroupID;
             circle.ID = planet.ID;
             circle.on('click tap', function (e) {
@@ -115,7 +111,7 @@ var Game = {
             });
             Game.planets.push(circle);
             Game.gameLayer.add(circle);
-            Game.gameLayer.add(text);
+            Game.gameLayer.add(circle.Text);
         });
         Game.stage.add(Game.gameLayer);
         Game.stage.draw();
@@ -123,13 +119,15 @@ var Game = {
 
 
     UpdatePlanetsState: function (remotePlanets) {
-        console.log(remotePlanets);
+        //console.log(remotePlanets);
         Game.planets.forEach(function (planet) {
             for (var i = 0; i < remotePlanets.length; i++) {
                 if (remotePlanets[i].ID == planet.ID) {
                     planet.ShipCount = remotePlanets[i].ShipCount;
                     planet.GroupID= remotePlanets[i].GroupID;
                     planet.Text.setText(planet.ShipCount.toString());
+                    planet.Text.setX(planet.getX() - planet.Text.getWidth() / 2);
+                    planet.Text.setY(planet.getY() - planet.Text.getHeight() / 2);
                     planet.setFill(Game.colors[planet.GroupID]);
                 }
             }
