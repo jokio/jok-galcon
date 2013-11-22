@@ -8,7 +8,7 @@ var Game = {
     colors: ['gray', 'green', 'yellow'],
     selectedPlanet: undefined,
     proxy : undefined,
-
+    canvasIsDrawn : undefined,
     Init: function () {
         Game.proxy = new GameHub('GameHub', jok.config.sid, jok.config.channel);
         Game.proxy.on('Online', this.Online.bind(this));
@@ -66,6 +66,10 @@ var Game = {
 
     
     DrawPlanets: function (remotePlanets) {
+        if (Game.canvasIsDrawn != undefined) {
+            return;
+        }
+        Game.canvasIsDrawn = true;
         this.stage = new Kinetic.Stage({
             container: 'container',
             width: 800,
@@ -94,8 +98,6 @@ var Game = {
             circle.ID = planet.ID;
             circle.on('click tap', function (e) {
                 if (e.which == 1) {
-
-
                     if (Game.selectedPlanet == undefined) {
                         if (this.GroupID != Game.currentPlayerGroupID) {
                             return;
@@ -106,7 +108,6 @@ var Game = {
                     }
                 }
                 else if (e.which == 3){
-                    // TODO gamoidzaxe Move();
                     Game.proxy.send('move', Game.selectedPlanet.ID, this.ID, Math.ceil(Game.selectedPlanet.ShipCount / 2));
                     Game.selectedPlanet.setStroke(null);
                     Game.selectedPlanet = undefined;
