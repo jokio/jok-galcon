@@ -89,10 +89,11 @@
             });
             circle.Text.setX(circle.getX() - circle.Text.getWidth() / 2);
             circle.Text.setY(circle.getY() - circle.Text.getHeight() / 2);
+            circle.Text;
             circle.ShipCount = planet.ShipCount;
             circle.GroupID = planet.GroupID;
             circle.ID = planet.ID;
-            circle.on('click tap', function (e) {
+            circle.OnClick = function (e) {
                 if (e.which == 1) {
                     if (Game.selectedPlanet == undefined) {
                         if (this.GroupID != Game.currentPlayerGroupID) {
@@ -103,11 +104,17 @@
                         Game.gameLayer.draw();
                     }
                 }
-                else if (e.which == 3){
+                else if (e.which == 3) {
                     Game.proxy.send('move', Game.selectedPlanet.ID, this.ID, Math.ceil(Game.selectedPlanet.ShipCount / 2));
                     Game.selectedPlanet.setStroke(null);
                     Game.selectedPlanet = undefined;
                 }
+            };
+            circle.on('click tap', function (e) {
+                circle.OnClick(e);
+            });
+            circle.Text.on('click tap', function (e) {
+                circle.OnClick(e);
             });
             Game.planets.push(circle);
             Game.gameLayer.add(circle);
