@@ -19,7 +19,7 @@ namespace Jok.StarWars.Controllers
         public ActionResult Play(string id, string sid)
         {
             var loginUrl = ConfigurationManager.AppSettings["jok:SiteUrl"] + "/joinus?returnUrl=" + Request.Url;
-            var exitUrl = ConfigurationManager.AppSettings["jok:SiteUrl"] + "/lobby/japmatrix";
+            var exitUrl = ConfigurationManager.AppSettings["jok:SiteUrl"] + "/lobby/starwars";
 
             if (!String.IsNullOrEmpty(sid))
             {
