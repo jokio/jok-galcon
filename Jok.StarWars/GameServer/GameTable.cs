@@ -163,7 +163,7 @@ namespace Jok.StarWars.GameServer
                     var x = randomGenerator.Next(50, 750);
                     var y = randomGenerator.Next(50, 500);
                     var r = randomGenerator.Next(20, 50);
-                    var s = randomGenerator.Next(5, 100);
+                    var s = randomGenerator.Next(5, 70);
                     for (var j = 0; j < i; j++)
                     {
                         var distance = GetDistance(x, y, Planets[j].X, Planets[j].Y);
