@@ -33,12 +33,6 @@ namespace Jok.StarWars.GameServer
 
         #endregion
 
-        private double GetDistance(int x1, int y1, int x2, int y2)
-        {
-            var dx = x1 - x2;
-            var dy = y1 - y2;
-            return Math.Sqrt(dx * dx + dy * dy);            
-        }
 
         public void Move(int userid, Guid from, Guid to, int percent)
         {
@@ -62,16 +56,7 @@ namespace Jok.StarWars.GameServer
             }
         }
 
-        public void UpdatePlanetsState(object _obj)
-        {
-            var planets = Planets.Select(c => new PlanetState
-            {
-                GroupID = c.GroupID,
-                ID = c.ID,
-                ShipCount = c.ShipCount
-            }).ToList();
-            GameCallback.UpdatePlanetsState(this, planets);
-        }
+
 
         protected override void OnJoin(GamePlayer player, object state)
         {
@@ -161,16 +146,7 @@ namespace Jok.StarWars.GameServer
 
         }
 
-        private bool CheckFinishGame()
-        {
-            if (Planets.Count(c => c.GroupID == 1) * Planets.Count(c=>c.GroupID == 2) == 0)
-            {
-                var winnerGroupID = Planets.Count(c => c.GroupID == 1) > 0 ? 1 : 2;
-                LastWinner = Players.FirstOrDefault(c => c.GroupID == winnerGroupID).UserID;
-                return true;
-            }
-            return false;
-        }
+
 
         void Init()
         {
@@ -226,24 +202,23 @@ namespace Jok.StarWars.GameServer
             Players.ForEach(p => p.Init());
         }
 
-        private void AddShips(object _object)
+        bool CheckFinishGame()
         {
-            Planets.ForEach(c =>
+            if (Planets.Count(c => c.GroupID == 1) * Planets.Count(c => c.GroupID == 2) == 0)
             {
-                if (c.GroupID != 0)
-                { 
-                    c.ShipCount+= c.Radius / 10;
-                }
-            });
-
+                var winnerGroupID = Planets.Count(c => c.GroupID == 1) > 0 ? 1 : 2;
+                LastWinner = Players.FirstOrDefault(c => c.GroupID == winnerGroupID).UserID;
+                return true;
+            }
+            return false;
         }
 
-        private void FinishGame()
+        void FinishGame()
         {
             Timer.Stop();
             StateUpdaterTimer.Stop();
             Status = TableStatus.Finished;
-            var winnerGroup = Planets.FirstOrDefault(c=>c.GroupID != 0 && c.ShipCount > 0);
+            var winnerGroup = Planets.FirstOrDefault(c => c.GroupID != 0 && c.ShipCount > 0);
             if (winnerGroup != null)
             {
                 Players.ForEach(c =>
@@ -256,6 +231,38 @@ namespace Jok.StarWars.GameServer
             }
             GameCallback.TableState(this, this);
         }
+
+        double GetDistance(int x1, int y1, int x2, int y2)
+        {
+            var dx = x1 - x2;
+            var dy = y1 - y2;
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        void UpdatePlanetsState(object _obj)
+        {
+            var planets = Planets.Select(c => new PlanetState
+            {
+                GroupID = c.GroupID,
+                ID = c.ID,
+                ShipCount = c.ShipCount
+            }).ToList();
+            GameCallback.UpdatePlanetsState(this, planets);
+        }
+
+        void AddShips(object _object)
+        {
+            Planets.ForEach(c =>
+            {
+                if (c.GroupID != 0)
+                { 
+                    c.ShipCount+= c.Radius / 10;
+                }
+            });
+
+        }
+
+
 
         public enum TableStatus
         {
