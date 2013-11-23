@@ -57,7 +57,10 @@
                 jok.setPlayer(2, opponent);
                 $('#Notification > .item').hide();
                 this.DrawPlanets(table.Planets);
-                $('#StarWarsImage').hide();
+                $('#StarWarsImage').fadeTo('fast', 0, function () {
+                    $('#StarWarsImage').hide();
+                    $('#StarWarsImage').css('opacity', 1);
+                });
                 break;
             case 3:
                 Game.gameIsOver = true;
