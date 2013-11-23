@@ -146,9 +146,25 @@
 }
 
 
+/* Site ------------ */
 
 .kineticjs-content canvas {
     left: 0px;
     top: 0px;
     position: absolute;
+}
+
+
+#StarWarsImage {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    background: url('/content/images/starwars.png') center top no-repeat;
+    opacity: .8;
+}
+
+#StarWarsImage:hover {
+    opacity: 1;
 }
