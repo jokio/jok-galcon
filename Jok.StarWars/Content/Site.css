@@ -163,6 +163,15 @@
     bottom: 0px;
     background: url('/content/images/starwars.png') center top no-repeat;
     opacity: .8;
+    transition: all .2s linear;
+    -webkit-transition: all .2s linear; /* Safari */
+}
+
+#StarWarsImage.minimized {
+    top: -180px;
+    background-size: 370px;
+    height: 160px;
+    z-index: 1;
 }
 
 #StarWarsImage:hover {
