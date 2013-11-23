@@ -50,6 +50,7 @@
                 $('#Notification > .item.waiting_opponent').show();
                 jok.setPlayer(1, jok.currentUserID);
                 $('#StarWarsImage').removeClass('minimized');
+                $('#container').hide();
                 break;
             case 1:
                 var opponent = (table.players[0].UserID == jok.currentUserID) ? table.players[1].UserID : table.players[0].UserID;
@@ -58,6 +59,7 @@
                 $('#Notification > .item').hide();
                 this.DrawPlanets(table.Planets);
                 $('#StarWarsImage').addClass('minimized');
+                $('#container').show();
                 break;
             case 3:
                 Game.gameIsOver = true;
@@ -65,6 +67,7 @@
                 $('#Notification > .item.table_finish_winner > span').html(jok.players[table.LastWinner].nick);
                 $('#Notification > .item.table_finish_winner').show();
                 $('#StarWarsImage').removeClass('minimized');
+                $('#container').hide();
                 break;
         }
     },
