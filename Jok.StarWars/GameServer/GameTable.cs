@@ -24,7 +24,8 @@ namespace Jok.StarWars.GameServer
         public TableStatus Status { get; set; }
         [DataMember]
         public List<Planet> Planets { get; set; }
-
+        [DataMember]
+        public int LastWinner { get; set; }
         private IJokTimer<object> Timer = JokTimer<object>.Create();
         private IJokTimer<object> StateUpdaterTimer = JokTimer<object>.Create();
 
@@ -164,6 +165,8 @@ namespace Jok.StarWars.GameServer
         {
             if (Planets.Count(c => c.GroupID == 1) * Planets.Count(c=>c.GroupID == 2) == 0)
             {
+                var winnerGroupID = Planets.Count(c => c.GroupID == 1) > 0 ? 1 : 2;
+                LastWinner = Players.FirstOrDefault(c => c.GroupID == winnerGroupID).UserID;
                 return true;
             }
             return false;

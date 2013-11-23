@@ -7,7 +7,8 @@
     colors: ['gray', 'green', 'yellow'],
     selectedPlanet: undefined,
     proxy : undefined,
-    canvasIsDrawn : undefined,
+    canvasIsDrawn: undefined,
+    gameIsOver : undefined,
     Init: function () {
         Game.proxy = new GameHub('GameHub', jok.config.sid, jok.config.channel);
         Game.proxy.on('Online', this.Online.bind(this));
@@ -56,6 +57,12 @@
                 $('#Notification > .item').hide();
                 this.DrawPlanets(table.Planets);
                 break;
+            case 3:
+                Game.gameIsOver = true;
+                $('#Notification > .item').hide();
+                $('#Notification > .item.table_finish_winner > span').html(jok.players[table.LastWinner].nick);
+                $('#Notification > .item.table_finish_winner').show();
+                break;
         }
     },
 
@@ -94,8 +101,21 @@
             circle.ShipCount = planet.ShipCount;
             circle.GroupID = planet.GroupID;
             circle.ID = planet.ID;
+            circle.RemoveSelection = function () {
+                this.setStroke(null);
+                Game.selectedPlanet = undefined;
+            }
             circle.OnClick = function (e) {
+                if (Game.gameIsOver != undefined && Game.gameIsOver) {
+                    return;
+                }
                 if (e.which == 1) {
+                    if (Game.selectedPlanet != undefined) {
+                        if (Game.selectedPlanet.ID == this.ID) {
+                            this.RemoveSelection();
+                            return;
+                        }
+                    }
                     if (Game.selectedPlanet == undefined) {
                         if (this.GroupID != Game.currentPlayerGroupID) {
                             return;
@@ -153,6 +173,4 @@
         jok.setPlayer(2, null);
     }
 }
-
-
 Game.Init();
