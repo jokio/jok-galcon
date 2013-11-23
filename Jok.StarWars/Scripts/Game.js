@@ -104,6 +104,15 @@
             circle.RemoveSelection = function () {
                 this.setStroke(null);
                 Game.selectedPlanet = undefined;
+                Game.gameLayer.draw();
+            }
+            circle.OnMouseOver = function () {
+                circle.setOpacity(0.7);
+                Game.gameLayer.draw();
+            }
+            circle.OnMouseOut = function(){
+                circle.setOpacity(1);
+                Game.gameLayer.draw();
             }
             circle.OnClick = function (e) {
                 if (Game.gameIsOver != undefined && Game.gameIsOver) {
@@ -131,6 +140,15 @@
                     Game.selectedPlanet = undefined;
                 }
             };
+            circle.on('mouseover', function () {
+                circle.OnMouseOver();
+            });
+            circle.Text.on('mouseover', function () {
+                circle.OnMouseOver();
+            });
+            circle.on('mouseout', function () {
+                circle.OnMouseOut();
+            });
             circle.on('click tap', function (e) {
                 circle.OnClick(e);
             });
