@@ -65,7 +65,8 @@ namespace Jok.StarWars.GameServer
                 case TableStatus.New :
                     if (!Players.Contains(player))
                     {
-                        Players.Add(player);
+                        AddPlayer(player);
+                        //Players.Add(player);
                     }
                     
                     if (Players.Count() == 2)
