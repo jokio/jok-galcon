@@ -8,7 +8,9 @@
     selectedPlanet: undefined,
     proxy : undefined,
     canvasIsDrawn: undefined,
-    gameIsOver : undefined,
+    gameIsOver: undefined,
+    conqueringShips: 50,
+    percentageLabel: undefined,
     Init: function () {
         Game.proxy = new GameHub('GameHub', jok.config.sid, jok.config.channel);
         Game.proxy.on('Online', this.Online.bind(this));
@@ -141,7 +143,7 @@
                     }
                 }
                 else if (e.which == 3) {
-                    Game.proxy.send('move', Game.selectedPlanet.ID, this.ID, Math.ceil(Game.selectedPlanet.ShipCount / 2));
+                    Game.proxy.send('move', Game.selectedPlanet.ID, this.ID, Math.ceil(Game.selectedPlanet.ShipCount * Game.conqueringShips / 100));
                     Game.selectedPlanet.setStroke(null);
                     Game.selectedPlanet = undefined;
                 }
@@ -165,11 +167,49 @@
             Game.gameLayer.add(circle);
             Game.gameLayer.add(circle.Text);
         });
+
+
+
+        $("#Game").on('mousewheel', function (event) {
+            if (event.originalEvent.wheelDelta < 0) {
+                Game.DecreasePercentage();
+            } else {
+                Game.IncreasePercentage();
+            }
+        });
+        $("#Game").on('DOMMouseScroll', function (event) {
+            if (event.originalEvent.detail > 0) {
+                Game.DecreasePercentage();
+            } else {
+                Game.IncreasePercentage();
+            }
+
+        });
+        Game.percentageLabel = new Kinetic.Text({
+            fontSize: 30,
+            fontFamily: 'Calibri',
+            fill: 'black',
+            text: Game.conqueringShips + '%',
+            x: 20,
+            y: 20
+        });
+        Game.gameLayer.add(Game.percentageLabel);
         Game.stage.add(Game.gameLayer);
         Game.stage.draw();
     },
 
-
+    IncreasePercentage: function(){
+        Game.conqueringShips = Math.min(100, Game.conqueringShips + 5);
+        Game.UpdatePercentage();
+    },
+    DecreasePercentage: function () {
+        Game.conqueringShips = Math.max(10, Game.conqueringShips - 5);
+        Game.UpdatePercentage();
+    },
+    UpdatePercentage: function () {
+        Game.percentageLabel.setText(Game.conqueringShips + '%');
+        Game.gameLayer.draw();
+    },
     UpdatePlanetsState: function (remotePlanets) {
         //console.log(remotePlanets);
         Game.planets.forEach(function (planet) {
@@ -188,7 +228,6 @@
     },
 
     Close : function (reason) {
-
         $('#Notification > .item').hide();
         $('#Notification > .item.quit > span').html(reason);
         $('#Notification > .item.quit').show();
