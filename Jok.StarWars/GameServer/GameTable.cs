@@ -189,14 +189,13 @@ namespace Jok.StarWars.GameServer
                     }
                 }
             }
-            var firstPlayer = randomGenerator.Next(0, NumberOfPlanets);
-            var secondPlayer = randomGenerator.Next(0, NumberOfPlanets);
-            while (secondPlayer == firstPlayer)
-            {
-                secondPlayer = randomGenerator.Next(0, NumberOfPlanets);
-            }
-            Planets[firstPlayer].GroupID = 1;
-            Planets[secondPlayer].GroupID = 2;
+            var firstPlayerID = GetPlanetNearBorder(4);
+            var secondPlayerID = GetPlanetNearBorder(2);
+            
+            var firstPlayerPlanet = Planets.FirstOrDefault(c=>c.ID == firstPlayerID);
+            var secondPlayerPlanet = Planets.FirstOrDefault(c => c.ID == secondPlayerID);
+            firstPlayerPlanet.GroupID = 1;
+            secondPlayerPlanet.GroupID = 2;
             Players[0].GroupID = 1;
             Players[1].GroupID = 2;
             ShipsAddTimer.SetInterval(OnShipsAddTimer, null, 2000);
@@ -274,7 +273,7 @@ namespace Jok.StarWars.GameServer
             var left = Planets.Min(c=>c.X);
             var right = Planets.Max(c => c.X);
             var compareValues = new[] {-1, top, right, bottom, left };
-            if (border % 2 == 0)
+            if (border % 2 == 1)
             {
                 var planet = Planets.FirstOrDefault(c => c.Y == compareValues[border]);
                 if (planet == null)
@@ -292,7 +291,6 @@ namespace Jok.StarWars.GameServer
                 }
                 return planet.ID;
             }
-            return null;
         }
 
         public enum TableStatus
