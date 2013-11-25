@@ -145,9 +145,7 @@ namespace Jok.StarWars.GameServer
             var opponent = GetNextPlayer(player);
             GameCallback.TableState(player, this);
             GameCallback.TableState(opponent, this);
-
         }
-
 
 
         void Init()
@@ -196,6 +194,10 @@ namespace Jok.StarWars.GameServer
             var secondPlayerPlanet = Planets.FirstOrDefault(c => c.ID == secondPlayerID);
             firstPlayerPlanet.GroupID = 1;
             secondPlayerPlanet.GroupID = 2;
+
+            firstPlayerPlanet.ShipCount = randomGenerator.Next(0, 10) + 50;
+            secondPlayerPlanet.ShipCount = randomGenerator.Next(0, 10) + 50;
+            
             Players[0].GroupID = 1;
             Players[1].GroupID = 2;
             ShipsAddTimer.SetInterval(OnShipsAddTimer, null, 2000);

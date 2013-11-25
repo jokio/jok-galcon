@@ -21,7 +21,11 @@
         Game.proxy.on('UpdatePlanetsState', this.UpdatePlanetsState.bind(this));
         Game.proxy.on('UserAuthenticated', this.UserAuthenticated.bind(this));
         Game.proxy.on('Close', this.Close.bind(this));
+        Game.proxy.on('PlayAgain', this.PlayAgain(this));
         Game.proxy.start();
+        $(".play_again").on('click', function () {
+            Game.PlayAgain();
+        });
     },
 
 
@@ -41,7 +45,7 @@
     TableState: function (table) {
 
         table.players.forEach(function (player) {
-            console.log(player.GroupID);
+            //console.log(player.GroupID);
             if (player.UserID == jok.currentUserID) {
                 Game.currentPlayerGroupID = player.GroupID;
             }
@@ -244,6 +248,12 @@
         $('#Game').hide();
         jok.setPlayer(1, null);
         jok.setPlayer(2, null);
+    },
+
+    PlayAgain: function () {
+        $("#Game").html('<div id="StarWarsImage"></div><div id="container" oncontextmenu="return false;"></div>');
     }
+
+    
 }
 Game.Init();
