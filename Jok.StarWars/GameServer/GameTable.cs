@@ -263,6 +263,37 @@ namespace Jok.StarWars.GameServer
             GameCallback.UpdatePlanetsState(this, planets);
         }
 
+        protected Guid? GetPlanetNearBorder(int border) //saatis isris mimartulebit: 1 - zeda Border, 2- marjvena, 3- qveda, 4- marcxena
+        {
+            if (!Planets.Any())
+            {
+                return null;
+            }
+            var top = Planets.Min(c => c.Y);
+            var bottom = Planets.Max(c => c.Y);
+            var left = Planets.Min(c=>c.X);
+            var right = Planets.Max(c => c.X);
+            var compareValues = new[] {-1, top, right, bottom, left };
+            if (border % 2 == 0)
+            {
+                var planet = Planets.FirstOrDefault(c => c.Y == compareValues[border]);
+                if (planet == null)
+                {
+                    return null;
+                }
+                return planet.ID;
+            }
+            else
+            {
+                var planet = Planets.FirstOrDefault(c => c.X == compareValues[border]);
+                if (planet == null)
+                {
+                    return null;
+                }
+                return planet.ID;
+            }
+            return null;
+        }
 
         public enum TableStatus
         {
