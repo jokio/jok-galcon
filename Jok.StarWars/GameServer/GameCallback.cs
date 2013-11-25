@@ -44,7 +44,7 @@ namespace Jok.StarWars.GameServer
 
 
 
-        public static void PlayerMove(ICallback to, int userid, Guid fromObject, Guid toObject, int shipsCount, int animationDuration)
+        public static void PlayerMove(ICallback to, int userid, List<Guid> fromObject, Guid toObject, int shipsCount, int animationDuration)
         {
             var conns = GetUsers(to);
             if (conns == null) return;

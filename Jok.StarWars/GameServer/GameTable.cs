@@ -34,7 +34,7 @@ namespace Jok.StarWars.GameServer
         #endregion
 
 
-        public void Move(int userid, Guid from, Guid to, int percent)
+        public void Move(int userid, List<Guid> from, Guid to, int percent)
         {
             var player = GetPlayer(userid);
             if (player == null) return;
@@ -98,21 +98,24 @@ namespace Jok.StarWars.GameServer
             }
         }
 
-        protected void OnMove(GamePlayer player, Guid from, Guid to, int count)
+        protected void OnMove(GamePlayer player, List<Guid> from, Guid to, int percent)
         {
-            var startPlanet = Planets.FirstOrDefault(c => c.ID == from);
+            var count = 0;
+            var startPlanets = Planets.Where(c => from.Contains(c.ID) && c.GroupID  == player.GroupID && c.ShipCount > 0).ToList();
+            var startPlanetIDs = startPlanets.Select(c=>c.ID).ToList();
             var targetPlanet = Planets.FirstOrDefault(c => c.ID == to);
 
-            if (startPlanet == null || targetPlanet == null) return;
-            if (startPlanet.GroupID != player.GroupID) return;
-
-            if (startPlanet.ShipCount < count)
+            if (!startPlanets.Any() || targetPlanet == null) return;
+            count = startPlanets.Sum(c => c.ShipCount) * percent / 100;
+            Planets.ForEach(c =>
             {
-                count = startPlanet.ShipCount;
-            }
+                if (startPlanetIDs.Contains(c.ID))
+                {
+                    c.ShipCount -= c.ShipCount * percent / 100;
+                }
+            });
 
-            startPlanet.ShipCount -= count;
-            if (startPlanet.GroupID == targetPlanet.GroupID)
+            if (player.GroupID == targetPlanet.GroupID)
             {
                 targetPlanet.ShipCount += count;
             }

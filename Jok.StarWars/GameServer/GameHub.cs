@@ -9,12 +9,12 @@ namespace Jok.StarWars.GameServer
 {
     public class GameHub : GameHubBase<GameTable>
     {
-        public void Move(Guid from, Guid to, int count)
+        public void Move(List<Guid> from, Guid to, int percent)
         {
             var user = GetCurrentUser();
             if (user == null) return;
 
-            user.Table.Move(user.UserID, from, to, count);
+            user.Table.Move(user.UserID, from, to, percent);
         }
 
         public void PlayAgain()

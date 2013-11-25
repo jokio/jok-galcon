@@ -6,11 +6,12 @@
     currentPlayerGroupID: undefined,
     colors: ['gray', 'green', 'yellow'],
     selectedPlanet: undefined,
-    proxy : undefined,
+    proxy: undefined,
     canvasIsDrawn: undefined,
     gameIsOver: undefined,
     conqueringShips: 50,
     percentageLabel: undefined,
+    selectedPlanetIDs: [],
     Init: function () {
         Game.proxy = new GameHub('GameHub', jok.config.sid, jok.config.channel);
         Game.proxy.on('Online', this.Online.bind(this));
@@ -36,9 +37,9 @@
     PlayerMove: function (userid, fromObject, toObject, shipsCount, animationDuration) {
 
     },
-    
+
     TableState: function (table) {
-        
+
         table.players.forEach(function (player) {
             console.log(player.GroupID);
             if (player.UserID == jok.currentUserID) {
@@ -118,7 +119,7 @@
                 circle.setOpacity(0.7);
                 Game.gameLayer.draw();
             }
-            circle.OnMouseOut = function(){
+            circle.OnMouseOut = function () {
                 circle.setOpacity(1);
                 Game.gameLayer.draw();
             }
@@ -127,25 +128,29 @@
                     return;
                 }
                 if (e.which == 1) {
-                    if (Game.selectedPlanet != undefined) {
-                        if (Game.selectedPlanet.ID == this.ID) {
+                    if (Game.selectedPlanetIDs != undefined) {
+                        if (Game.selectedPlanetIDs.indexOf(this.ID) > 0) {
                             this.RemoveSelection();
+                            Game.selectedPlanetIDs.splice(Game.selectedPlanetIDs.indexOf(this.ID), 1);
                             return;
                         }
                     }
-                    if (Game.selectedPlanet == undefined) {
-                        if (this.GroupID != Game.currentPlayerGroupID) {
-                            return;
-                        }
-                        Game.selectedPlanet = this;
-                        this.setStroke('red');
-                        Game.gameLayer.draw();
+
+                    if (this.GroupID != Game.currentPlayerGroupID) {
+                        return;
                     }
+
+                    Game.selectedPlanetIDs.push(this.ID);
+                    this.setStroke('red');
+                    Game.gameLayer.draw();
                 }
                 else if (e.which == 3) {
-                    Game.proxy.send('move', Game.selectedPlanet.ID, this.ID, Math.ceil(Game.selectedPlanet.ShipCount * Game.conqueringShips / 100));
-                    Game.selectedPlanet.setStroke(null);
-                    Game.selectedPlanet = undefined;
+                    Game.proxy.send('move', Game.selectedPlanetIDs, this.ID, Game.conqueringShips);
+                    Game.planets.forEach(function (planet) {
+                        planet.setStroke(null);
+                    });
+                    Game.selectedPlanetIDs = [];
+
                 }
             };
             circle.on('mouseover', function () {
@@ -198,7 +203,7 @@
         Game.stage.draw();
     },
 
-    IncreasePercentage: function(){
+    IncreasePercentage: function () {
         Game.conqueringShips = Math.min(100, Game.conqueringShips + 5);
         Game.UpdatePercentage();
     },
@@ -216,7 +221,7 @@
             for (var i = 0; i < remotePlanets.length; i++) {
                 if (remotePlanets[i].ID == planet.ID) {
                     planet.ShipCount = remotePlanets[i].ShipCount;
-                    planet.GroupID= remotePlanets[i].GroupID;
+                    planet.GroupID = remotePlanets[i].GroupID;
                     planet.Text.setText(planet.ShipCount.toString());
                     planet.Text.setX(planet.getX() - planet.Text.getWidth() / 2);
                     planet.Text.setY(planet.getY() - planet.Text.getHeight() / 2);
@@ -227,7 +232,7 @@
         });
     },
 
-    Close : function (reason) {
+    Close: function (reason) {
         $('#Notification > .item').hide();
         $('#Notification > .item.quit > span').html(reason);
         $('#Notification > .item.quit').show();
