@@ -128,15 +128,20 @@
                     return;
                 }
                 if (e.which == 1) {
-                    if (Game.selectedPlanetIDs != undefined) {
-                        if (Game.selectedPlanetIDs.indexOf(this.ID) > 0) {
+                    if (Game.selectedPlanetIDs.indexOf(this.ID) != -1) {
+                        while (Game.selectedPlanetIDs.indexOf(this.ID) > -1) {
                             this.RemoveSelection();
                             Game.selectedPlanetIDs.splice(Game.selectedPlanetIDs.indexOf(this.ID), 1);
-                            return;
                         }
+                        return;
                     }
 
                     if (this.GroupID != Game.currentPlayerGroupID) {
+                        Game.proxy.send('move', Game.selectedPlanetIDs, this.ID, Game.conqueringShips);
+                        Game.planets.forEach(function (planet) {
+                            planet.setStroke(null);
+                        });
+                        Game.selectedPlanetIDs = [];
                         return;
                     }
 
@@ -150,7 +155,6 @@
                         planet.setStroke(null);
                     });
                     Game.selectedPlanetIDs = [];
-
                 }
             };
             circle.on('mouseover', function () {
