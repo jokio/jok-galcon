@@ -157,6 +157,7 @@
                     Game.selectedPlanetIDs = [];
                 }
             };
+
             circle.on('mouseover', function () {
                 circle.OnMouseOver();
             });
