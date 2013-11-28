@@ -31,6 +31,7 @@ namespace Jok.StarWars.GameServer
 
         private const int NumberOfPlanets = 20;
 
+        private Random randomGenerator = new Random();
         #endregion
 
 
@@ -152,7 +153,6 @@ namespace Jok.StarWars.GameServer
         {
             Status = TableStatus.New;
             Planets = new List<Planet>();
-            var randomGenerator = new Random();
 
             for (var i = 0; i < NumberOfPlanets; i++)
             {

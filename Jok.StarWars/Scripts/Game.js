@@ -21,11 +21,8 @@
         Game.proxy.on('UpdatePlanetsState', this.UpdatePlanetsState.bind(this));
         Game.proxy.on('UserAuthenticated', this.UserAuthenticated.bind(this));
         Game.proxy.on('Close', this.Close.bind(this));
-        Game.proxy.on('PlayAgain', this.PlayAgain(this));
+        //Game.proxy.on('PlayAgain', this.PlayAgain(this));
         Game.proxy.start();
-        $(".play_again").on('click', function () {
-            Game.PlayAgain();
-        });
     },
 
 
@@ -210,6 +207,7 @@
         Game.gameLayer.add(Game.percentageLabel);
         Game.stage.add(Game.gameLayer);
         Game.stage.draw();
+        $(".play_again").on('click', this.OnPlayAgain);
     },
 
     IncreasePercentage: function () {
@@ -250,8 +248,9 @@
         jok.setPlayer(2, null);
     },
 
-    PlayAgain: function () {
-        $("#Game").html('<div id="StarWarsImage"></div><div id="container" oncontextmenu="return false;"></div>');
+    OnPlayAgain: function () {
+        //$("#Game").html('<div id="StarWarsImage"></div><div id="container" oncontextmenu="return false;"></div>');
+        this.proxy.send('PlayAgain');
     }
 
     
