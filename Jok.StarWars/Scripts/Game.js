@@ -100,7 +100,7 @@
                 fill: Game.colors[planet.GroupID],
             });
             circle.Text = new Kinetic.Text({
-                text: planet.ShipCount.toString(),
+                //text: planet.ShipCount.toString(),
                 fontSize: 14,
                 fontFamily: 'Calibri',
                 fill: 'black'
@@ -229,7 +229,15 @@
                 if (remotePlanets[i].ID == planet.ID) {
                     planet.ShipCount = remotePlanets[i].ShipCount;
                     planet.GroupID = remotePlanets[i].GroupID;
-                    planet.Text.setText(planet.ShipCount.toString());
+                    if (planet.ShipCount != -1)
+                    {
+                        planet.Text.setText(planet.ShipCount.toString());
+                    }
+                    else
+                    {
+                        planet.Text.setText("");
+                    }
+                    
                     planet.Text.setX(planet.getX() - planet.Text.getWidth() / 2);
                     planet.Text.setY(planet.getY() - planet.Text.getHeight() / 2);
                     planet.setFill(Game.colors[planet.GroupID]);

@@ -75,8 +75,49 @@ namespace Jok.StarWars.GameServer
                         Init();
                         Status = TableStatus.Started;
                         var opponent = GetNextPlayer(player);
-                        GameCallback.TableState(player, this);
-                        GameCallback.TableState(opponent, this);
+                        var firstPlayerTable = (GameTable)this.MemberwiseClone();
+                        var secondPlayerTable = (GameTable)this.MemberwiseClone();
+                        var planets = this.Planets;
+
+                        var firstPlayerPlanets = (from p in planets
+                                                  select new Planet
+                                                  {
+                                                      X = p.X,
+                                                      Y = p.Y,
+                                                      Radius = p.Radius,
+                                                      GroupID = p.GroupID,
+                                                      ID = p.ID,
+                                                      ShipCount = p.ShipCount
+                                                  }).ToList();
+                        firstPlayerPlanets.ForEach(c =>
+                        {
+                            if (c.GroupID == 2)
+                            {
+                                c.ShipCount = -1;
+                            }
+                        });
+                        var secondPlayerPlanets = (from p in planets
+                                                   select new Planet
+                                                   {
+                                                       X = p.X,
+                                                       Y = p.Y,
+                                                       Radius = p.Radius,
+                                                       GroupID = p.GroupID,
+                                                       ID = p.ID,
+                                                       ShipCount = p.ShipCount
+                                                   }).ToList();
+
+                        secondPlayerPlanets.ForEach(c =>
+                        {
+                            if (c.GroupID == 1)
+                            {
+                                c.ShipCount = -1;
+                            }
+                        });
+                        firstPlayerTable.Planets = firstPlayerPlanets;
+                        secondPlayerTable.Planets = secondPlayerPlanets;
+                        GameCallback.TableState(player, firstPlayerTable);
+                        GameCallback.TableState(opponent, secondPlayerTable);
                     }
                     else
                     {
@@ -255,13 +296,46 @@ namespace Jok.StarWars.GameServer
 
         void UpdatePlanetsState()
         {
+            var firstPlayer = Players[0];
+            var secondPlayer = Players[1];
             var planets = Planets.Select(c => new PlanetState
             {
                 GroupID = c.GroupID,
                 ID = c.ID,
                 ShipCount = c.ShipCount
             }).ToList();
-            GameCallback.UpdatePlanetsState(this, planets);
+            var firstPlayerPlanets = (from p in planets
+                                      select new PlanetState
+                                      {
+                                          GroupID = p.GroupID,
+                                          ID = p.ID,
+                                          ShipCount = p.ShipCount
+                                      }).ToList();
+            firstPlayerPlanets.ForEach(c =>
+            {
+                if (c.GroupID == 2)
+                {
+                    c.ShipCount = -1;
+                }
+            });
+            var secondPlayerPlanets = (from p in planets
+                                       select new PlanetState
+                                       {
+                                           GroupID = p.GroupID,
+                                           ID = p.ID,
+                                           ShipCount = p.ShipCount
+                                       }).ToList();
+            
+            secondPlayerPlanets.ForEach(c =>
+            {
+                if (c.GroupID == 1)
+                {
+                    c.ShipCount = -1;    
+                }
+            });
+            GameCallback.UpdatePlanetsState(firstPlayer, firstPlayerPlanets);
+            GameCallback.UpdatePlanetsState(secondPlayer, secondPlayerPlanets);
+            
         }
 
         protected Guid? GetPlanetNearBorder(int border) //saatis isris mimartulebit: 1 - zeda Border, 2- marjvena, 3- qveda, 4- marcxena
