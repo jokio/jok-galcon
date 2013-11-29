@@ -175,36 +175,39 @@
                 circle.OnClick(e);
             });
             Game.planets.push(circle);
+
             Game.gameLayer.add(circle);
             Game.gameLayer.add(circle.Text);
         });
 
 
 
-        $("#Game").on('mousewheel', function (event) {
+        $('html').on('mousewheel', function (event) {
+            if (Game.gameIsOver == undefined) {
+                return;
+            }
             if (event.originalEvent.wheelDelta < 0) {
                 Game.DecreasePercentage();
+                event.preventDefault();
             } else {
                 Game.IncreasePercentage();
+                event.preventDefault();
             }
         });
-        $("#Game").on('DOMMouseScroll', function (event) {
+        $('html').on('DOMMouseScroll', function (event) {
+            if (Game.gameIsOver == undefined) {
+                return;
+            }
             if (event.originalEvent.detail > 0) {
                 Game.DecreasePercentage();
+                event.preventDefault();
             } else {
                 Game.IncreasePercentage();
+                event.preventDefault();
             }
 
         });
-        Game.percentageLabel = new Kinetic.Text({
-            fontSize: 30,
-            fontFamily: 'Calibri',
-            fill: 'black',
-            text: Game.conqueringShips + '%',
-            x: 20,
-            y: 20
-        });
-        Game.gameLayer.add(Game.percentageLabel);
+        $(document).animate({ scrollTop: $('html').height() }, 1000);
         Game.stage.add(Game.gameLayer);
         Game.stage.draw();
         $(".play_again").on('click', this.OnPlayAgain);
@@ -219,8 +222,7 @@
         Game.UpdatePercentage();
     },
     UpdatePercentage: function () {
-        Game.percentageLabel.setText(Game.conqueringShips + '%');
-        Game.gameLayer.draw();
+        $("#percentage").html(Game.conqueringShips.toString());
     },
     UpdatePlanetsState: function (remotePlanets) {
         //console.log(remotePlanets);
