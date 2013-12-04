@@ -71,7 +71,11 @@
                 $('#Notification > .item.table_finish_winner > span').html(jok.players[table.LastWinner].nick);
                 $('#Notification > .item.table_finish_winner').show();
                 $('#StarWarsImage').removeClass('minimized');
+                $("#container").html("");
                 $('#container').hide();
+                
+                Game.canvasIsDrawn = undefined;
+
                 break;
         }
     },
@@ -260,7 +264,7 @@
 
     OnPlayAgain: function () {
         //$("#Game").html('<div id="StarWarsImage"></div><div id="container" oncontextmenu="return false;"></div>');
-        this.proxy.send('PlayAgain');
+        Game.proxy.send('PlayAgain');
     }
 
     
