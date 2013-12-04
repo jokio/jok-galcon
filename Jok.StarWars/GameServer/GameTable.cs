@@ -75,49 +75,8 @@ namespace Jok.StarWars.GameServer
                         Init();
                         Status = TableStatus.Started;
                         var opponent = GetNextPlayer(player);
-                        var firstPlayerTable = (GameTable)this.MemberwiseClone();
-                        var secondPlayerTable = (GameTable)this.MemberwiseClone();
-                        var planets = this.Planets;
-
-                        var firstPlayerPlanets = (from p in planets
-                                                  select new Planet
-                                                  {
-                                                      X = p.X,
-                                                      Y = p.Y,
-                                                      Radius = p.Radius,
-                                                      GroupID = p.GroupID,
-                                                      ID = p.ID,
-                                                      ShipCount = p.ShipCount
-                                                  }).ToList();
-                        firstPlayerPlanets.ForEach(c =>
-                        {
-                            if (c.GroupID == 2)
-                            {
-                                c.ShipCount = -1;
-                            }
-                        });
-                        var secondPlayerPlanets = (from p in planets
-                                                   select new Planet
-                                                   {
-                                                       X = p.X,
-                                                       Y = p.Y,
-                                                       Radius = p.Radius,
-                                                       GroupID = p.GroupID,
-                                                       ID = p.ID,
-                                                       ShipCount = p.ShipCount
-                                                   }).ToList();
-
-                        secondPlayerPlanets.ForEach(c =>
-                        {
-                            if (c.GroupID == 1)
-                            {
-                                c.ShipCount = -1;
-                            }
-                        });
-                        firstPlayerTable.Planets = firstPlayerPlanets;
-                        secondPlayerTable.Planets = secondPlayerPlanets;
-                        GameCallback.TableState(player, firstPlayerTable);
-                        GameCallback.TableState(opponent, secondPlayerTable);
+                        GameCallback.TableState(player, this);
+                        GameCallback.TableState(opponent, this);
                     }
                     else
                     {
