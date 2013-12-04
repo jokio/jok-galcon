@@ -182,8 +182,8 @@
 
 
 
-        $('html').on('mousewheel', function (event) {
-            if (Game.gameIsOver == undefined) {
+        $(document).on('mousewheel', function (event) {
+            if (Game.gameIsOver != undefined) {
                 return;
             }
             if (event.originalEvent.wheelDelta < 0) {
@@ -194,8 +194,8 @@
                 event.preventDefault();
             }
         });
-        $('html').on('DOMMouseScroll', function (event) {
-            if (Game.gameIsOver == undefined) {
+        $(document).on('DOMMouseScroll', function (event) {
+            if (Game.gameIsOver != undefined) {
                 return;
             }
             if (event.originalEvent.detail > 0) {
@@ -207,7 +207,7 @@
             }
 
         });
-        $(document).animate({ scrollTop: $('html').height() }, 1000);
+        window.scrollTo(0, document.body.scrollHeight);
         Game.stage.add(Game.gameLayer);
         Game.stage.draw();
         $(".play_again").on('click', this.OnPlayAgain);
