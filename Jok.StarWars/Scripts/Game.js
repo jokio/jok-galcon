@@ -23,6 +23,7 @@
         Game.proxy.on('Close', this.Close.bind(this));
         //Game.proxy.on('PlayAgain', this.PlayAgain(this));
         Game.proxy.start();
+        Game.LoadPlayerSettings();
     },
 
 
@@ -183,9 +184,6 @@
             Game.gameLayer.add(circle);
             Game.gameLayer.add(circle.Text);
         });
-
-
-
         $(document).on('mousewheel', function (event) {
             if (Game.gameIsOver != undefined) {
                 return;
@@ -211,12 +209,15 @@
             }
 
         });
+        Game.UpdatePercentage();
         window.scrollTo(0, document.body.scrollHeight);
         Game.stage.add(Game.gameLayer);
         Game.stage.draw();
         $(".play_again").on('click', this.OnPlayAgain);
     },
-
+    SetPercentage: function (percent) {
+        localStorage.ShipPercentage = percent;
+    },
     IncreasePercentage: function () {
         Game.conqueringShips = Math.min(100, Game.conqueringShips + 5);
         Game.UpdatePercentage();
@@ -226,7 +227,15 @@
         Game.UpdatePercentage();
     },
     UpdatePercentage: function () {
-        $("#percentage").html(Game.conqueringShips.toString());
+        $("#percentage").html(Game.conqueringShips.toString() + "%");
+        Game.SetPercentage(Game.conqueringShips);
+    },
+    LoadPlayerSettings : function(){
+        if (localStorage.ShipPercentage) {
+            Game.conqueringShips = localStorage.ShipPercentage;
+        } else {
+            localStorage.ShipPercentage = 50;
+        }
     },
     UpdatePlanetsState: function (remotePlanets) {
         //console.log(remotePlanets);
@@ -266,7 +275,5 @@
         //$("#Game").html('<div id="StarWarsImage"></div><div id="container" oncontextmenu="return false;"></div>');
         Game.proxy.send('PlayAgain');
     }
-
-    
 }
 Game.Init();
