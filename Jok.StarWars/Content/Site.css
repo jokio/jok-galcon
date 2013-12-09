@@ -177,3 +177,13 @@
 #StarWarsImage:hover {
     opacity: 1;
 }
+
+#percentage {
+    position: fixed;
+    left: 20px;
+    bottom: 10px;
+    font-size: 26px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.63);
+}
+}
