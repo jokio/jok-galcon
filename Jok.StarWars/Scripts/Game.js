@@ -37,11 +37,46 @@
     },
 
     PlayerMove: function (userid, fromObject, toObject, shipsCount, animationDuration) {
+        var startPlanet = undefined;
+        var targetPlanet = undefined;
+        Game.planets.forEach(function (planet) {
+            if (planet.ID == fromObject) {
+                startPlanet = planet;
+            }
+            if (planet.ID == toObject) {
+                targetPlanet = planet;
+            }
+        });
+        var startX = startPlanet.getX();
+        var startY = startPlanet.getY();
+        var bomb = new Kinetic.Circle({
+            x: startX,
+            y: startY,
+            radius: 3,
+            fill: Game.colors[startPlanet.GroupID]
+        });
+        Game.gameLayer.add(bomb);
+        Game.gameLayer.draw();
+        var tween = new Kinetic.Tween({
+            node: bomb,
+            scaleX: 2,
+            scaleY: 1.5,
+            duration: 1,
+            x: targetPlanet.getX(),
+            y: targetPlanet.getY(),
+            onFinish: function () {
+                bomb.remove();
+                bomb.destroy();
+                Game.gameLayer.draw();
+            }
+        });
+        
+        console.log(tween);
+        tween.play();
 
     },
 
     TableState: function (table) {
-
         table.players.forEach(function (player) {
             //console.log(player.GroupID);
             if (player.UserID == jok.currentUserID) {

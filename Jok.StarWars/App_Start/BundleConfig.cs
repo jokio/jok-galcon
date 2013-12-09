@@ -14,7 +14,7 @@ namespace Jok.StarWars
             ));
 
             bundles.Add(new ScriptBundle("~/play/js").Include(
-                "~/Scripts/kinetic-v4.4.3.js",
+                "~/Scripts/kinetic-v4.7.4.min.js",
                 "~/Scripts/jquery.signalR-2.0.0.js",
                 "~/Scripts/Jok.GameEngine.js",
                 "~/Scripts/Game.js"
